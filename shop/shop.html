@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://www.paypalobjects.com/api/checkout.js" data-version-4></script>
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+   
+<!--   id: ATsB-Zkp1Tp3BYtEIWm1xq4DIeyHOBFEsW6dSXexGrkuY65sfHDyH9hf1AoSrPViYUVjFDmsbt9HwXD5-->
+<!--   secrett: EGfyU7cUikfnp-dF1UlpW2RfpZb3bzgawbltV7iIxmf1QjZPEvmYCm-Nv3dhnUjRlFKlpTMcXHvnNcjL-->
+    <div id="myContainerElement"></div>
+
+    <script>
+        // Render the button into the container element
+
+        paypal.Button.render({
+            
+            env:'production',
+
+            // Pass the client ids to use to create your transaction on sandbox and production environments
+
+            client: {
+                sandbox: 'EGfyU7cUikfnp-dF1UlpW2RfpZb3bzgawbltV7iIxmf1QjZPEvmYCm-Nv3dhnUjRlFKlpTMcXHvnNcjL', // from https://developer.paypal.com/developer/applications/
+                production: 'ATsB-Zkp1Tp3BYtEIWm1xq4DIeyHOBFEsW6dSXexGrkuY65sfHDyH9hf1AoSrPViYUVjFDmsbt9HwXD5' // from https://developer.paypal.com/developer/applications/
+            },
+
+            // Pass the payment details for your transaction
+            // See https://developer.paypal.com/docs/api/payments/#payment_create for the expected json parameters
+
+            payment: function(data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: '1.00',
+                            currency: 'USD'
+                        }
+                    }]
+                });
+            },
+
+            // Display a "Pay Now" button rather than a "Continue" button
+
+            commit: true,
+
+            // Pass a function to be called when the customer completes the payment
+
+            onAuthorize: function(data, actions) {
+                return actions.payment.execute().then(function(response) {
+                    console.log('The payment was completed!');
+                });
+            },
+
+            // Pass a function to be called when the customer cancels the payment
+
+            onCancel: function(data) {
+                console.log('The payment was cancelled!');
+            }
+
+        }, '#myContainerElement');
+    </script>
+</body>
+
+</html>
